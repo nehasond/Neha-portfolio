@@ -30,3 +30,26 @@ cancelBtn.onclick = () => {
   cancelBtn.style.display = "none"; // Hide cancel icon
   body.classList.remove("disabledScroll");
 };
+
+// Mailto click handler: show a small notification when opening the user's mail client
+function showEmailNotification(text) {
+  const n = document.createElement('div');
+  n.className = 'email-notification';
+  n.textContent = text;
+  document.body.appendChild(n);
+  requestAnimationFrame(() => n.classList.add('visible'));
+  setTimeout(() => {
+    n.classList.remove('visible');
+    setTimeout(() => n.remove(), 300);
+  }, 2000);
+}
+
+document.addEventListener('click', function (e) {
+  const a = e.target.closest('a[href^="mailto:"]');
+  if (!a) return;
+  e.preventDefault();
+  const href = a.getAttribute('href');
+  // open mail client and show notification
+  window.location.href = href;
+  showEmailNotification('Opening your mail client...');
+});
